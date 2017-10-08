@@ -1,2 +1,2 @@
 # LTE
-LTE (Lightweight Text Editor)
+###### LTE is a lightweight text editor dedicated to scripting.
