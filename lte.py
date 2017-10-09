@@ -28,7 +28,7 @@
 from tkinter import *
 from tkinter import ttk
 from functools import partial
-from tkinter import Tk, scrolledtext, Menu, filedialog, messagebox
+from tkinter import Tk, scrolledtext, Menu, filedialog, simpledialog, messagebox
 
 import os, sys, time, datetime, webbrowser, fileinput
 
@@ -68,24 +68,36 @@ def new():
     if len(textArea.get('1.0', END + '-1c')) > 0:
         if messagebox.askyesno("Save?", "Do you wish to save?"):
             saveFile()
-    else:
-        textArea.delete('1.0', END)
+        else:
+            textArea.delete('1.0', END)
         
 def openFile():
-    file = filedialog.askopenfile(parent = root, mode = 'rb', title = "Select a text file...")
+    file = filedialog.askopenfile(parent = root, mode = 'rb', title = "Select a text file...", filetypes = (("Text file", "*.txt"), ("All files", "*.*")))
     if file != None:
         contents = file.read()
         textArea.insert('1.0', contents)
         file.close()
                 
 def saveFile():
-    file = filedialog.asksaveasfile(mode = 'w')
+    file = filedialog.asksaveasfile(mode = 'w', defaultextension = ".txt", filetypes = (("Text file", "*.txt"), ("Html file", "*.html"), ("All files", "*.*")))
     if file != None:
         # Slice off the last character from get, as an extra return (enter) is added
         data = textArea.get('1.0', END + '-1c')
         file.write(data)
         file.close()
-        
+
+def findFile():
+    findString = simpledialog.askstring("Find...", "Enter text")
+    textData = textArea.get('1.0', END)
+
+    occurances = textData.upper().count(findString.upper())
+
+    if textData.upper().count(findString.upper()) > 0:
+        label = messagebox.showinfo("Results", findString + " has multiple occurances, " + str(occurances))
+
+    else:
+        label = messagebox.showinfo("Results", "Naah sorry mate")
+
 def copy(self, event=None):
     pass
         
@@ -149,6 +161,8 @@ menu.add_cascade(label = "Edit", menu = editMenu)
 editMenu.add_command(label = "Cut", accelerator = "Ctrl+X")
 editMenu.add_command(label = "Copy", command = copy, accelerator = "Ctrl+C")
 editMenu.add_command(label = "Paste", command = paste, accelerator = "Ctrl+V")
+editMenu.add_separator()
+editMenu.add_command(label = "Find file", command = findFile, accelerator = "Ctrl+F")
 editMenu.add_separator()
 editMenu.add_command(label = "Delete")
 editMenu.add_command(label = "Rename")
