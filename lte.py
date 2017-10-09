@@ -28,7 +28,7 @@
 from tkinter import *
 from tkinter import Tk, scrolledtext, Menu, filedialog, messagebox
 
-import os, sys, time, datetime, webbrowser
+import os, sys, time, datetime, webbrowser, fileinput
 
 from src.menufunc import *
 #from src.about import *
@@ -47,14 +47,14 @@ root.title("LTE (Lightweight Text Editor)") # imposta il titolo della finestra
 root.geometry("640x480") # imposta la risoluzione della finestra
 root.resizable(width = True, height = True) # Finestra scalabile (altezza, larghezza)
 
+# Statusbar
+statusbar = Label(root, text ="Al momento non fa nulla...", bd = 1, relief = SUNKEN, anchor = W)
+statusbar.pack(side = BOTTOM, fill = X)
+
 # Text area editor
 textArea = scrolledtext.ScrolledText(root, width = 640, height = 480, font =
-("Monospace", 14), highlightthickness = 0, bd = 2)
+("", 14), highlightthickness = 0, bd = 2)
 textArea.pack()
-
-# Status bar
-statusBar = Label(root, text ="Al momento non fa nulla...", bd = 1, relief = SUNKEN, anchor = W)
-statusBar.pack(side = BOTTOM, fill = X)
 
 # Menubar functions
 def new():
@@ -75,9 +75,8 @@ def saveFile():
         file.write(data)
         file.close()
         
-def copy():
-    text.clipboard_clear()
-    text.clipboard_append(text.selection_get())
+def copy(self, event=None):
+    pass
         
 def paste():
     try:
@@ -97,24 +96,25 @@ def rename():
     pass
     
 def line():
-    lin = "_" * 15
+    lin = "-" * 60
     textArea.insert(INSERT,lin)
 
 def date():
-    data = datetime.date.today()
-    textArea.insert(INSERT,data)
+    # %p = Locale’s equivalent of either AM or PM.
+    # %b = Locale’s abbreviated month name.
+    # %Z = Time zone name (no characters if no time zone exists).
+    data = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S %Z")
+    textArea.insert(INSERT, data)
         
 def about():
-    ab = Toplevel(root)
-    textArea = "LTE (Lightweight Text Editor\nRealizzato da Stefano Peris (C) 2017\n https://github.com/LordStephen77/LTE\nIl programma è rilasciato sotto licensa GPL"
-    la = Label(ab, text = txt, foreground = 'blue')
-    la.pack()
+    label = messagebox.showinfo("About", "LTE (Lightweight Text Editor\nRealizzato da Stefano Peris (C) 2017\n https://github.com/LordStephen77/LTE\nIl programma è rilasciato sotto licenza GPL")
 
 def web():
     webbrowser.open('https://github.com/LordStephen77/LTE')
             
 def exit():
-    root.destroy()
+    if messagebox.askyesno("Quit", "Are you sure you want to quit?"):
+        root.destroy()
 
 # Menu options
 menu = Menu(root)
@@ -133,12 +133,12 @@ fileMenu.add_command(label = "Exit", command = exit)
 editMenu = Menu(root)
 menu.add_cascade(label = "Edit", menu = editMenu)
 editMenu.add_command(label = "Cut")
-editMenu.add_command(label = "Copy")
-editMenu.add_command(label = "Paste")
+editMenu.add_command(label = "Copy", command = copy)
+editMenu.add_command(label = "Paste", command = paste)
 editMenu.add_separator()
 editMenu.add_command(label = "Delete")
 editMenu.add_command(label = "Rename")
-editMenu.add_command(label = "Select All")
+editMenu.add_command(label = "Select All", command = selectAll)
 editMenu.add_separator()
 editMenu.add_command(label = "Line", command = line)
 editMenu.add_command(label = "Date", command = date)
@@ -146,7 +146,7 @@ editMenu.add_command(label = "Date", command = date)
 helpMenu = Menu(root)
 menu.add_cascade(label = "Help", menu = helpMenu)
 helpMenu.add_command(label = "Github", command = web)
-helpMenu.add_command(label = "About")
+helpMenu.add_command(label = "About", command = about)
 
 # Keep window open
 root.mainloop()
