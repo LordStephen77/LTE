@@ -28,7 +28,7 @@
 from tkinter import *
 from tkinter import Tk, scrolledtext, Menu, filedialog, messagebox
 
-import os, time, datetime, webbrowser
+import os, sys, time, datetime, webbrowser
 
 from src.menufunc import *
 #from src.about import *
