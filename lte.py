@@ -47,7 +47,7 @@ root.title("LTE (Lightweight Text Editor)") # imposta il titolo della finestra
 root.geometry("640x480") # imposta la risoluzione della finestra
 root.resizable(width = True, height = True) # Finestra scalabile (altezza, larghezza)
 
-# Statusbar
+# Adds the status bar bottom
 statusbar = Label(root, text ="Al momento non fa nulla...", bd = 1, relief = SUNKEN, anchor = W)
 statusbar.pack(side = BOTTOM, fill = X)
 
