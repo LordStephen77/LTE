@@ -52,33 +52,85 @@ textArea = scrolledtext.ScrolledText(root, width = 640, height = 480, font =
 ("Monospace", 14), highlightthickness = 0, bd = 2)
 textArea.pack()
 
-# Call menufunc
-menufunc.new()
-menufunc.openFile()
-menufunc.saveFile()
-menufunc.copy()
-menufunc.paste()
-menufunc.delete()
-menufunc.selectAll()
-menufunc.rename()
-menufunc.about()
-menufunc.exit()
+# Status bar
+statusBar = Label(root, text ="Al momento non fa nulla...", bd = 1, relief = SUNKEN, anchor = W)
+statusBar.pack(side = BOTTOM, fill = X)
+
+# Menubar functions
+def new():
+    pass
+        
+def openFile():
+    file = filedialog.askopenfile(parent = root, mode = 'rb', title = "Select a text file...")
+    if file != None:
+        contents = file.read()
+        textArea.insert('1.0', contents)
+        file.close()
+                
+def saveFile():
+    file = filedialog.asksaveasfile(mode = 'w')
+    if file != None:
+        # Slice off the last character from get, as an extra return (enter) is added
+        data = textArea.get('1.0', END + '-1c')
+        file.write(data)
+        file.close()
+        
+def copy():
+    text.clipboard_clear()
+    text.clipboard_append(text.selection_get())
+        
+def paste():
+    try:
+        teext = textArea.selection_get(selection='CLIPBOARD')
+        textArea.insert(INSERT, teext)
+    except:
+        tkMessageBox.showerror("Errore","Gli appunti sono vuoti!")
+        
+def delete():
+    sel = textArea.get(SEL_FIRST, SEL_LAST)
+    textArea.delete(SEL_FIRST, SEL_LAST)
+        
+def selectAll():
+    pass
+        
+def rename():
+    pass
+    
+def line():
+    lin = "_" * 15
+    textArea.insert(INSERT,lin)
+
+def date():
+    data = datetime.date.today()
+    textArea.insert(INSERT,data)
+        
+def about():
+    ab = Toplevel(root)
+    textArea = "LTE (Lightweight Text Editor\nRealizzato da Stefano Peris (C) 2017\n https://github.com/LordStephen77/LTE\nIl programma è rilasciato sotto licensa GPL"
+    la = Label(ab, text = txt, foreground = 'blue')
+    la.pack()
+
+def web():
+    webbrowser.open('https://github.com/LordStephen77/LTE')
+            
+def exit():
+    root.destroy()
 
 # Menu options
 menu = Menu(root)
 root.config(menu = menu)
 
-fileMenu = Menu(menu)
+fileMenu = Menu(root)
 menu.add_cascade(label = "File", menu = fileMenu)
 fileMenu.add_command(label = "New")
 fileMenu.add_command(label = "Open", command = openFile)
-fileMenu.add_command(label = "Save")
+fileMenu.add_command(label = "Save", command = saveFile)
 fileMenu.add_separator()
 fileMenu.add_command(label = "Print")
 fileMenu.add_separator()
 fileMenu.add_command(label = "Exit", command = exit)
 
-editMenu = Menu(menu)
+editMenu = Menu(root)
 menu.add_cascade(label = "Edit", menu = editMenu)
 editMenu.add_command(label = "Cut")
 editMenu.add_command(label = "Copy")
@@ -87,14 +139,14 @@ editMenu.add_separator()
 editMenu.add_command(label = "Delete")
 editMenu.add_command(label = "Rename")
 editMenu.add_command(label = "Select All")
+editMenu.add_separator()
+editMenu.add_command(label = "Line", command = line)
+editMenu.add_command(label = "Date", command = date)
 
-helpMenu = Menu(menu)
+helpMenu = Menu(root)
 menu.add_cascade(label = "Help", menu = helpMenu)
+helpMenu.add_command(label = "Github", command = web)
 helpMenu.add_command(label = "About")
-
-# Status bar
-statusBar = Label(root, text ="Al momento non fa nulla...", bd = 1, relief = SUNKEN, anchor = W)
-statusBar.pack(side = BOTTOM, fill = X)
 
 # Keep window open
 root.mainloop()
