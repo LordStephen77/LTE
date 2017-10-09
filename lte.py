@@ -30,9 +30,6 @@ from tkinter import Tk, scrolledtext, Menu, filedialog, messagebox
 
 import os, sys, time, datetime, webbrowser, fileinput
 
-from src.menufunc import *
-#from src.about import *
-
 # Funzione che restituisce una stringa per i widget non ancora abilitati
 def noFunc():
     print("Non succede nulla... per adesso...")
@@ -109,6 +106,9 @@ def date():
 def about():
     label = messagebox.showinfo("About", "LTE (Lightweight Text Editor\nRealizzato da Stefano Peris (C) 2017\n https://github.com/LordStephen77/LTE\nIl programma è rilasciato sotto licenza GPL")
 
+def help():
+    pass
+
 def web():
     webbrowser.open('https://github.com/LordStephen77/LTE')
             
@@ -120,32 +120,37 @@ def exit():
 menu = Menu(root)
 root.config(menu = menu)
 
-fileMenu = Menu(root)
+fileMenu = Menu(root, tearoff = 0)
 menu.add_cascade(label = "File", menu = fileMenu)
-fileMenu.add_command(label = "New")
-fileMenu.add_command(label = "Open", command = openFile)
-fileMenu.add_command(label = "Save", command = saveFile)
+fileMenu.add_command(label = "New", accelerator = "Ctrl+N")
+fileMenu.add_command(label = "Open", command = openFile, accelerator = "Ctrl+O")
+fileMenu.add_command(label = "Save", command = saveFile, accelerator = "Ctrl+S")
 fileMenu.add_separator()
 fileMenu.add_command(label = "Print")
 fileMenu.add_separator()
-fileMenu.add_command(label = "Exit", command = exit)
+fileMenu.add_command(label = "Exit", command = exit, accelerator = "Ctrl+Q")
 
-editMenu = Menu(root)
+editMenu = Menu(root, tearoff = 0)
 menu.add_cascade(label = "Edit", menu = editMenu)
-editMenu.add_command(label = "Cut")
-editMenu.add_command(label = "Copy", command = copy)
-editMenu.add_command(label = "Paste", command = paste)
+editMenu.add_command(label = "Cut", accelerator = "Ctrl+X")
+editMenu.add_command(label = "Copy", command = copy, accelerator = "Ctrl+C")
+editMenu.add_command(label = "Paste", command = paste, accelerator = "Ctrl+V")
 editMenu.add_separator()
 editMenu.add_command(label = "Delete")
 editMenu.add_command(label = "Rename")
 editMenu.add_command(label = "Select All", command = selectAll)
-editMenu.add_separator()
-editMenu.add_command(label = "Line", command = line)
-editMenu.add_command(label = "Date", command = date)
 
-helpMenu = Menu(root)
+# editMenu (submenu)
+subMenu = Menu(editMenu, tearoff = 0)
+editMenu.add_cascade(label = "Special", menu = subMenu, underline = 0)
+subMenu.add_command(label = "Line", accelerator = "Ctrl+L")
+subMenu.add_command(label = "Date", accelerator = "Ctrl+D")
+
+helpMenu = Menu(root, tearoff = 0)
 menu.add_cascade(label = "Help", menu = helpMenu)
+helpMenu.add_command(label = "Help", command = help)
 helpMenu.add_command(label = "Github", command = web)
+helpMenu.add_separator()
 helpMenu.add_command(label = "About", command = about)
 
 # Keep window open
