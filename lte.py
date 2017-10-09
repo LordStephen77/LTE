@@ -58,9 +58,9 @@ statusbar.pack(side = BOTTOM, fill = X)
 TSizegrip = ttk.Sizegrip(root)
 TSizegrip.place(anchor = SE, relx = 1.0, rely = 1.0)
 
-# Text area editor
+# Text area editor (insertbackground is text cursor)
 textArea = scrolledtext.ScrolledText(root, width = 640, height = 480, font =
-("", 12), insertbackground = "white", fg = "white", background = "black", highlightthickness = 0, bd = 2)
+("", 12), fg = "white", insertbackground = "white", background = "black", highlightthickness = 0, bd = 2)
 textArea.pack()
 
 # Menubar functions
