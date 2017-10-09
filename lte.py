@@ -72,6 +72,7 @@ def new():
             textArea.delete('1.0', END)
         
 def openFile():
+    textArea.delete('1.0', END)
     file = filedialog.askopenfile(parent = root, mode = 'rb', title = "Select a text file...", filetypes = (("Text file", "*.txt"), ("All files", "*.*")))
     if file != None:
         contents = file.read()
