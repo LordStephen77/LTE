@@ -26,6 +26,8 @@
 """
 
 from tkinter import *
+from tkinter import ttk
+from functools import partial
 from tkinter import Tk, scrolledtext, Menu, filedialog, messagebox
 
 import os, sys, time, datetime, webbrowser, fileinput
@@ -40,6 +42,10 @@ def startFile():
 # Root to main window
 root = Tk()
 
+#root.style = Style()
+#('clam', 'alt', 'default', 'classic')
+#root.Style.theme_use("clam")
+
 root.title("LTE (Lightweight Text Editor)") # imposta il titolo della finestra
 root.geometry("640x480") # imposta la risoluzione della finestra
 root.resizable(width = True, height = True) # Finestra scalabile (altezza, larghezza)
@@ -48,14 +54,22 @@ root.resizable(width = True, height = True) # Finestra scalabile (altezza, largh
 statusbar = Label(root, text ="Al momento non fa nulla...", bd = 1, relief = SUNKEN, anchor = W)
 statusbar.pack(side = BOTTOM, fill = X)
 
+# Sizegrip bottom right
+TSizegrip = ttk.Sizegrip(root)
+TSizegrip.place(anchor = SE, relx = 1.0, rely = 1.0)
+
 # Text area editor
 textArea = scrolledtext.ScrolledText(root, width = 640, height = 480, font =
-("", 14), highlightthickness = 0, bd = 2)
+("", 12), highlightthickness = 0, bd = 2)
 textArea.pack()
 
 # Menubar functions
 def new():
-    pass
+    if len(textArea.get('1.0', END + '-1c')) > 0:
+        if messagebox.askyesno("Save?", "Do you wish to save?"):
+            saveFile()
+    else:
+        textArea.delete('1.0', END)
         
 def openFile():
     file = filedialog.askopenfile(parent = root, mode = 'rb', title = "Select a text file...")
@@ -104,7 +118,7 @@ def date():
     textArea.insert(INSERT, data)
         
 def about():
-    label = messagebox.showinfo("About", "LTE (Lightweight Text Editor\nRealizzato da Stefano Peris (C) 2017\n https://github.com/LordStephen77/LTE\nIl programma è rilasciato sotto licenza GPL")
+    label = messagebox.showinfo("About", "LTE (Lightweight Text Editor\nRealizzato da Stefano Peris (C) 2017\nhttps://github.com/LordStephen77/LTE\nIl programma è rilasciato sotto licenza GPL")
 
 def help():
     pass
@@ -122,7 +136,7 @@ root.config(menu = menu)
 
 fileMenu = Menu(root, tearoff = 0)
 menu.add_cascade(label = "File", menu = fileMenu)
-fileMenu.add_command(label = "New", accelerator = "Ctrl+N")
+fileMenu.add_command(label = "New", command = new, accelerator = "Ctrl+N")
 fileMenu.add_command(label = "Open", command = openFile, accelerator = "Ctrl+O")
 fileMenu.add_command(label = "Save", command = saveFile, accelerator = "Ctrl+S")
 fileMenu.add_separator()
@@ -153,7 +167,7 @@ helpMenu.add_command(label = "Github", command = web)
 helpMenu.add_separator()
 helpMenu.add_command(label = "About", command = about)
 
-# Keep window open
+# Keep main window open
 root.mainloop()
 
 #####################################################################
