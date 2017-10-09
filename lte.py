@@ -21,7 +21,7 @@
 * @github      https://github.com/LordStephen77/LTE
 * @license     GPL-3.0 (https://www.gnu.org/licenses/gpl-3.0.en.html)
 * @create      dom 08 ott 2017 17:04:24 CEST
-* @update      none
+* @update      lun 09 ott 2017 11:44:08 CEST
 
 """
 
@@ -30,6 +30,7 @@ from tkinter import Tk, scrolledtext, Menu, filedialog, messagebox
 
 import os, time, datetime, webbrowser
 
+from src.menufunc import *
 #from src.about import *
 
 # Funzione che restituisce una stringa per i widget non ancora abilitati
@@ -51,41 +52,17 @@ textArea = scrolledtext.ScrolledText(root, width = 640, height = 480, font =
 ("Monospace", 14), highlightthickness = 0, bd = 2)
 textArea.pack()
 
-# Menubar functions
-def new():
-    pass
-        
-def openFile():
-    file = filedialog.askopenfile(parent = root, mode = 'rb', title = "Select a text file...")
-    
-    if file != None:
-        contents = file.read()
-        textArea.insert('1.0', contents)
-        file.close()
-                
-    def saveFile():
-        pass
-        
-    def copy():
-        pass
-        
-    def paste():
-        pass
-        
-    def delete():
-        pass
-        
-    def selectAll():
-        pass
-        
-    def rename():
-        pass
-        
-    def about():
-        pass
-            
-    def exit():
-        root.destroy()
+# Call menufunc
+menufunc.new()
+menufunc.openFile()
+menufunc.saveFile()
+menufunc.copy()
+menufunc.paste()
+menufunc.delete()
+menufunc.selectAll()
+menufunc.rename()
+menufunc.about()
+menufunc.exit()
 
 # Menu options
 menu = Menu(root)
